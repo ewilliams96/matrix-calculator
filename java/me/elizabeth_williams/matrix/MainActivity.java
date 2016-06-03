@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                setMatrixSize(MATRIX_A, Integer.valueOf(rowA.getText().toString()),
-                       Integer.valueOf(rowA.getText().toString()));
+                       Integer.valueOf(colA.getText().toString()));
             }
         });
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: restore bundle 
+        //TODO: restore bundle
 
     }
 
