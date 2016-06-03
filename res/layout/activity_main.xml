@@ -9,175 +9,221 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="me.elizabeth_williams.matrix.MainActivity">
-
-    <GridLayout
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="5"
-        android:rowCount="2">
-
-        <TextView
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Matrix A"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_row="0"
-            android:layout_column="0" />
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Rows"
-            android:id="@+id/textView"
-            android:layout_alignParentTop="true"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:layout_columnSpan="1"/>
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="5"
+                android:rowCount="2">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="2"
-            android:id="@+id/editRowsA"
-            android:text="3"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:gravity="right"
-            android:layout_columnSpan="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/matrA"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_row="0"
+                    android:layout_column="0" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Cols"
-            android:layout_marginLeft="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:layout_columnSpan="1"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="2"
-            android:id="@+id/editColsA"
-            android:text="3"
-            android:layout_row="1"
-            android:layout_column="3"
-            android:gravity="right"
-            android:layout_columnSpan="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/rows"
+                    android:id="@+id/textView"
+                    android:layout_alignParentTop="true"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_columnSpan="1"/>
 
-        <Button
-            android:layout_width="142dp"
-            android:layout_height="wrap_content"
-            android:text="Set"
-            android:id="@+id/buttonA"
-            android:layout_row="1"
-            android:layout_column="4"
-            android:layout_columnSpan="1"
-            android:layout_gravity="right"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="2"
+                    android:id="@+id/editRowsA"
+                    android:text="3"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:gravity="right"
+                    android:layout_columnSpan="1"/>
 
-    </GridLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/cols"
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:layout_columnSpan="1"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="2"
+                    android:id="@+id/editColsA"
+                    android:text="3"
+                    android:layout_row="1"
+                    android:layout_column="3"
+                    android:gravity="right"
+                    android:layout_columnSpan="1"/>
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:columnCount="3"
-        android:rowCount="3"
-        android:id="@+id/matrixA">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set"
+                    android:id="@+id/buttonA"
+                    android:layout_row="1"
+                    android:layout_column="4"
+                    android:layout_columnSpan="1"
+                    android:layout_gravity="right"/>
 
-    </GridLayout>
+            </GridLayout>
 
-    <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="5"
-        android:rowCount="2">
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:columnCount="3"
+                android:rowCount="3"
+                android:id="@+id/matrixA">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Matrix B"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_row="0"
-            android:layout_column="0" />
+            </GridLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Rows"
-            android:id="@+id/textView"
-            android:layout_alignParentTop="true"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:layout_columnSpan="1"/>
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="5"
+                android:rowCount="2">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="2"
-            android:id="@+id/editRowsB"
-            android:text="3"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:gravity="right"
-            android:layout_columnSpan="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/matrB"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_row="0"
+                    android:layout_column="0" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Cols"
-            android:layout_marginLeft="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:layout_columnSpan="1"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="2"
-            android:id="@+id/editColsB"
-            android:text="3"
-            android:layout_row="1"
-            android:layout_column="3"
-            android:gravity="right"
-            android:layout_columnSpan="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/rows"
+                    android:layout_alignParentTop="true"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_columnSpan="1"/>
 
-        <Button
-            android:layout_width="142dp"
-            android:layout_height="wrap_content"
-            android:text="Set"
-            android:id="@+id/buttonB"
-            android:layout_row="1"
-            android:layout_column="4"
-            android:layout_columnSpan="1"
-            android:layout_gravity="right"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="2"
+                    android:id="@+id/editRowsB"
+                    android:text="3"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:gravity="right"
+                    android:layout_columnSpan="1"/>
 
-    </GridLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/cols"
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:layout_columnSpan="1"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="2"
+                    android:id="@+id/editColsB"
+                    android:text="3"
+                    android:layout_row="1"
+                    android:layout_column="3"
+                    android:gravity="right"
+                    android:layout_columnSpan="1"/>
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:columnCount="3"
-        android:rowCount="3"
-        android:id="@+id/matrixB">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set"
+                    android:id="@+id/buttonB"
+                    android:layout_row="1"
+                    android:layout_column="4"
+                    android:layout_columnSpan="1"
+                    android:layout_gravity="right"/>
 
-    </GridLayout>
+            </GridLayout>
 
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:columnCount="3"
+                android:rowCount="3"
+                android:id="@+id/matrixB">
+
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:rowCount="2">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:id="@+id/add"
+                    android:layout_columnWeight="1"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subtract"
+                    android:id="@+id/sub"
+                    android:layout_columnWeight="1"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/multiply"
+                    android:id="@+id/mul"
+                    android:layout_columnWeight="1"/>
+            </GridLayout>
+
+
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:columnCount="3"
+                android:rowCount="3"
+                android:id="@+id/matrixC">
+
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 
