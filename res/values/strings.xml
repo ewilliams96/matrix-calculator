@@ -9,4 +9,6 @@
     <string name="subtract">Subtract</string>
     <string name="multiply">Multiply</string>
     <string name="sizeInvalid">Matrix size invalid.</string>
+    <string name="wrongSize">Matrices must be of the same size to perform this operation.</string>
+    <string name="missingCells">Fill in all cells before performing an operation.</string>
 </resources>

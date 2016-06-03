@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -34,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
     GridLayout matrixB;
     ArrayList<EditText> cellsA;
     ArrayList<EditText> cellsB;
+
+    //matrix dimensions
+    int rowAVal;
+    int colAVal;
+    int rowBVal;
+    int colBVal;
+
+    //operation buttons
+    Button add;
+    Button sub;
+    Button mul;
 
 
     @Override
@@ -71,6 +83,61 @@ public class MainActivity extends AppCompatActivity {
                         Integer.valueOf(colB.getText().toString()));
             }
         });
+        // get operation buttons
+        add = (Button) findViewById(R.id.add);
+        sub = (Button) findViewById(R.id.sub);
+        mul = (Button) findViewById(R.id.mul);
+        // operation listeners
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               ArrayList<Integer> cellAVals = userInputToValues(cellsA);
+               ArrayList<Integer> cellBVals = userInputToValues(cellsB);
+
+               // if there are blank cells when user tries to perform an operation, break
+               if(cellAVals == null || cellBVals == null){
+                   Log.i("tag", "null cell");
+                   errorToast(getString(R.string.missingCells));
+                   return;
+               }
+
+                if(rowAVal != rowBVal || colAVal != colBVal){
+                    errorToast(getString(R.string.wrongSize));
+                    return;
+                }
+               Matrix mA = new Matrix(cellAVals, rowAVal, colAVal);
+               Matrix mB = new Matrix(cellBVals, rowBVal, colBVal);
+               Matrix matrixResult = mA.add(mB);
+
+               errorToast("Not implemented yet");
+            }
+        });
+
+        sub.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+               errorToast("Not implemented yet");
+            }
+        });
+
+        mul.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                errorToast("Not implemented yet");
+            }
+        });
+
+        //TODO: restore bundle 
+
+    }
+
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        //TODO: save current displays/dimensions.
 
 
     }
@@ -96,18 +163,22 @@ public class MainActivity extends AppCompatActivity {
             matrix = matrixA;
             cellsA = new ArrayList<EditText>();
             cells = cellsA;
+            rowAVal = rows;
+            colAVal = cols;
         }
         else{
 
             matrix = matrixB;
             cellsB = new ArrayList<EditText>();
             cells = cellsB;
+            rowBVal = rows;
+            colBVal = cols;
 
         }
 
         // check for valid size input
         if(rows == -1 || cols == -1){
-            errorToast(R.string.sizeInvalid);
+            errorToast(getString(R.string.sizeInvalid));
             return;
         }
 
@@ -121,6 +192,9 @@ public class MainActivity extends AppCompatActivity {
 
         // width of grid
         int gridWidth = matrix.getWidth();
+
+        // add EditText cells to grid. Note that list of cells will go from left to right,
+        // until end of row, then left to right of next row, etc.
 
         for(int i = 0; i < numCells; i++){
             EditText e = new EditText(this);
@@ -142,9 +216,21 @@ public class MainActivity extends AppCompatActivity {
 
 
             cells.add(e); // store reference to each cell in the array
-            matrix.addView(e);
+            matrix.addView(e); // add to View
 
         }
+
+    }
+
+
+    /**
+     * Get user input values from EditText fields to separate Matrix from Views.
+     * @param input List of EditText fields
+     * @return ArrayList<Double> of values from text fields. Null if there are empty text fields.
+     */
+    private ArrayList<Integer> userInputToValues(ArrayList<EditText> input){
+        //TODO
+        return null;
 
     }
 
@@ -165,11 +251,17 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
-    private void errorToast(String s){
-        Toast toast = new Toast(this);
-        toast.setText(s);
-        toast.setDuration(Toast.LENGTH_SHORT);
+    public void errorToast(String s){
+        Toast t = Toast.makeText(this, s, Toast.LENGTH_SHORT);
+        t.show();
+    }
 
+    /**
+     * Display 3rd matrix with results of matrix operation.
+     * @param c Result of operation
+     */
+    private void displayResult(Matrix c){
+        //TODO
     }
 
 
