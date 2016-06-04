@@ -33,25 +33,25 @@ public class MainActivity extends AppCompatActivity {
     private EditText colB;
 
     //matrix layout components
-    GridLayout matrixAView;
-    GridLayout matrixBView;
-    GridLayout matrixCView;
-    ArrayList<TextView> cellsA;
-    ArrayList<TextView> cellsB;
-    ArrayList<TextView> cellsC;
+    private GridLayout matrixAView;
+    private GridLayout matrixBView;
+    private GridLayout matrixCView;
+    private ArrayList<TextView> cellsA;
+    private ArrayList<TextView> cellsB;
+    private ArrayList<TextView> cellsC;
 
     //matrix dimensions
-    int rowAVal;
-    int colAVal;
-    int rowBVal;
-    int colBVal;
-    int rowCVal;
-    int colCVal;
+    private int rowAVal;
+    private int colAVal;
+    private int rowBVal;
+    private int colBVal;
+    private int rowCVal;
+    private int colCVal;
 
     //operation buttons
-    Button add;
-    Button sub;
-    Button mul;
+    private Button add;
+    private Button sub;
+    private Button mul;
 
 
     @Override
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                    errorToast(getString(R.string.wrongSize));
                }
 
-               errorToast("Not implemented yet");
+               displayResult(matrixResult);
             }
         });
 
@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //TODO: restore bundle
+
+        //TODO: draw default array cells if no bundle to restore
 
     }
 
@@ -253,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             EditText e = new EditText(this);
 
             // get number input only
-            e.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+            e.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_CLASS_NUMBER);
 
             int colWidth = gridWidth/cols; // set min width of columns
             e.setMinimumWidth(colWidth);
@@ -337,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
         int numCells = c.getCols() * c.getRows(); // how many cells matrix will have
 
         for(int i = 0; i < numCells; i++ ){
-            String num = vals.toString();
+            String num = vals.get(i).toString();
             TextView t = new TextView(this);
             t.setText(num);
             matrixCView.addView(t);
@@ -345,13 +347,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-
-
-
-
-
 
 
 }

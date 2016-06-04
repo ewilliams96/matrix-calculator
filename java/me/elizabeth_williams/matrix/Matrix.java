@@ -18,12 +18,37 @@ public class Matrix {
     //2D array of values in matrix
     double[][] matrix2DArray;
 
+    /**
+     * Constructing from activity
+     * @param values
+     * @param r
+     * @param c
+     */
     public Matrix(List<Double> values, int r, int c){
         rows = r;
         cols = c;
         matrix2DArray = new double[rows][cols];
-
+        int valueIndex = 0;
         //TODO populate 2d array with values
+        for(int i = 0; i < r; i++){//loop through rows
+            for(int j = 0; j < c; j++){ //loop through cols
+                matrix2DArray[i][j] = values.get(valueIndex);
+                valueIndex++;
+            }
+        }
+
+    }
+
+    /**
+     * Alternative constructor (constructing from matrix class)
+     * @param values
+     * @param r
+     * @param c
+     */
+    public Matrix(double[][] values, int r, int c){
+        matrix2DArray = values;
+        rows = r;
+        cols = c;
 
     }
 
@@ -36,14 +61,20 @@ public class Matrix {
      * @return result of matrix addition, null if invalid operation
      */
     public Matrix add(Matrix otherMatrix){
-        //for now
-        return null;
-        //check if valid operation
-        /*if(this.rows != otherMatrix.rows || this.cols != otherMatrix.cols){
+
+        if(this.rows != otherMatrix.rows || this.cols != otherMatrix.cols){
             return null;
         }
-        //TODO actual addition
-       return otherMatrix;*/
+
+        double[][] resultArr = new double[this.rows][this.cols];
+
+        for(int i = 0; i < rows; i++ ){
+            for(int j = 0; j < cols; j++){
+                resultArr[i][j] = this.matrix2DArray[i][j] + otherMatrix.matrix2DArray[i][j];
+            }
+        }
+
+       return new Matrix(resultArr, this.rows, this.cols);
     }
 
     /**
@@ -92,8 +123,13 @@ public class Matrix {
      *
      */
     public ArrayList<Double> matrixToList(){
-        //TODO
-        return null;
+        ArrayList<Double> values = new ArrayList<Double>();
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                values.add(matrix2DArray[i][j]);
+            }
+        }
+        return values;
     }
 
 
