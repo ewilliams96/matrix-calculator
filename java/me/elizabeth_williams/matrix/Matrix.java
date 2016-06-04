@@ -1,5 +1,6 @@
 package me.elizabeth_williams.matrix;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,12 +16,12 @@ public class Matrix {
     private int cols;
 
     //2D array of values in matrix
-    int[][] matrix2DArray;
+    double[][] matrix2DArray;
 
     public Matrix(List<Integer> values, int r, int c){
         rows = r;
         cols = c;
-        matrix2DArray = new int[rows][cols];
+        matrix2DArray = new double[rows][cols];
 
         //TODO populate 2d array with values
 
@@ -63,6 +64,31 @@ public class Matrix {
 
     }
 
+    /**
+     * getter for rows of matrix
+     * @return rows
+     */
+    public int getRows(){
+        return rows;
+    }
+
+    /**
+     * setter for rows of matrix
+     * @return columns
+     */
+    public int getCols(){
+        return cols;
+    }
+
+    /**
+     * Take contents of matrix and represent as a list (0,0), (0,1)... (1,0), (1,1)
+     * To be used by the activity class so it doesn't have to do actual matrix calculations
+     *
+     */
+    public ArrayList<Double> matrixToList(){
+        //TODO
+        return null;
+    }
 
 
 

@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText colB;
 
     //matrix layout components
-    GridLayout matrixA;
-    GridLayout matrixB;
+    GridLayout matrixAView;
+    GridLayout matrixBView;
+    GridLayout matrixCView;
     ArrayList<EditText> cellsA;
     ArrayList<EditText> cellsB;
 
@@ -57,14 +59,16 @@ public class MainActivity extends AppCompatActivity {
         setA = (Button) findViewById(R.id.buttonA);
         rowA = (EditText) findViewById(R.id.editRowsA);
         colA = (EditText) findViewById(R.id.editColsA);
-        matrixA = (GridLayout) findViewById(R.id.matrixA);
+        matrixAView = (GridLayout) findViewById(R.id.matrixA);
 
         //Get matrix B controls from resources
         setB = (Button) findViewById(R.id.buttonB);
         rowB = (EditText) findViewById(R.id.editRowsB);
         colB = (EditText) findViewById(R.id.editColsB);
-        matrixB = (GridLayout) findViewById(R.id.matrixB);
+        matrixBView = (GridLayout) findViewById(R.id.matrixB);
         setB = (Button) findViewById(R.id.buttonB);
+
+        matrixCView = (GridLayout) findViewById(R.id.matrixC);
 
 
         // listeners for setting matrix size
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(m == MATRIX_A){
 
-            matrix = matrixA;
+            matrix = matrixAView;
             cellsA = new ArrayList<EditText>();
             cells = cellsA;
             rowAVal = rows;
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
 
-            matrix = matrixB;
+            matrix = matrixBView;
             cellsB = new ArrayList<EditText>();
             cells = cellsB;
             rowBVal = rows;
@@ -243,10 +247,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private int inputToInt(String input){
         int result;
-        try{
-            result = Integer.parseInt(input);
-        } catch(NumberFormatException e){
+        int i = Integer.parseInt(input);
+        if(i <= 0){
             result = -1;
+        }
+        else{
+            result = i;
         }
         return result;
     }
@@ -261,8 +267,25 @@ public class MainActivity extends AppCompatActivity {
      * @param c Result of operation
      */
     private void displayResult(Matrix c){
-        //TODO
+        matrixCView.removeAllViews(); // call in case there's already stuff there
+        // set grid layout rows/cols
+        matrixCView.setColumnCount(c.getCols());
+        matrixCView.setRowCount(c.getRows());
+
+        ArrayList<Double> vals = c.matrixToList(); // contents of matrix as a list
+
+        int numCells = c.getCols() * c.getRows(); // how many cells matrix will have
+
+        for(int i = 0; i < numCells; i++ ){
+            String num = vals.toString();
+            TextView t = new TextView(this);
+            t.setText(num);
+            matrixCView.addView(t);
+        }
+
     }
+
+
 
 
 
