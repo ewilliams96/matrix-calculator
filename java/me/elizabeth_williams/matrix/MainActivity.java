@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +22,13 @@ public class MainActivity extends AppCompatActivity {
     private final int MATRIX_A = 0;
     private final int MATRIX_B = 1;
     private final int MATRIX_C = 2;
+
+    //hashmap linking matrix # to corresponding view
+    HashMap<Integer, MatrixView> matrixViews;
+    MatrixView matrixA;
+    MatrixView matrixB;
+    MatrixView matrixC;
+    
     // defaults
     private final int ROW_DEFAULT = 3;
     private final int COL_DEFAULT = 3;
@@ -35,21 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText rowB;
     private EditText colB;
 
-    //matrix layout components
-    private GridLayout matrixAView;
-    private GridLayout matrixBView;
-    private GridLayout matrixCView;
-    private ArrayList<TextView> cellsA;
-    private ArrayList<TextView> cellsB;
-    private ArrayList<TextView> cellsC;
-
-    //matrix dimensions
-    private int rowAVal;
-    private int colAVal;
-    private int rowBVal;
-    private int colBVal;
-    private int rowCVal;
-    private int colCVal;
 
     //operation buttons
     private Button add;
@@ -66,16 +59,27 @@ public class MainActivity extends AppCompatActivity {
         setA = (Button) findViewById(R.id.buttonA);
         rowA = (EditText) findViewById(R.id.editRowsA);
         colA = (EditText) findViewById(R.id.editColsA);
-        matrixAView = (GridLayout) findViewById(R.id.matrixA);
+        GridLayout matrixAView = (GridLayout) findViewById(R.id.matrixA);
 
         //Get matrix B controls from resources
         setB = (Button) findViewById(R.id.buttonB);
         rowB = (EditText) findViewById(R.id.editRowsB);
         colB = (EditText) findViewById(R.id.editColsB);
-        matrixBView = (GridLayout) findViewById(R.id.matrixB);
+        GridLayout matrixBView = (GridLayout) findViewById(R.id.matrixB);
         setB = (Button) findViewById(R.id.buttonB);
 
-        matrixCView = (GridLayout) findViewById(R.id.matrixC);
+        GridLayout matrixCView = (GridLayout) findViewById(R.id.matrixC);
+
+        // matrixview objects
+        matrixA = new MatrixView(matrixAView, null, ROW_DEFAULT, COL_DEFAULT);
+        matrixB = new MatrixView(matrixBView, null, ROW_DEFAULT, COL_DEFAULT);
+        matrixC = new MatrixView(matrixCView, null, ROW_DEFAULT, COL_DEFAULT);
+
+        matrixViews = new HashMap<Integer, MatrixView>();
+
+        matrixViews.put(MATRIX_A, matrixA);
+        matrixViews.put(MATRIX_B, matrixB);
+        matrixViews.put(MATRIX_C, matrixC);
 
 
         // listeners for setting matrix size
@@ -105,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               ArrayList<Double> cellAVals = userInputToValues(cellsA);
-               ArrayList<Double> cellBVals = userInputToValues(cellsB);
+               ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+               ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
 
                // if there are blank cells when user tries to perform an operation, break
                if(cellAVals == null || cellBVals == null){
@@ -116,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
                }
 
 
-               Matrix mA = new Matrix(cellAVals, rowAVal, colAVal);
-               Matrix mB = new Matrix(cellBVals, rowBVal, colBVal);
+               Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
+               Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
                Matrix matrixResult = mA.add(mB);
 
                // if result matrix is null
@@ -174,45 +178,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(bundle);
     }
 
-    /**
-     * Helper method used to restore saved instance state.
-     * @param cells list of textviews/edittexts to extract contents from
-     * @param r rows
-     * @param c cols
-     * @param matrix which matrix (see constants)
-     */
-    private void restoreMatrixView(ArrayList<TextView> cells, int r, int c, int matrix){
-        GridLayout m;
-
-        // switch case to figure out which GridLayout we should be modifying
-        // idea for future: use a hashmap ?
-        switch(matrix){
-            case 0:
-                m = matrixAView;
-                break;
-            case 1:
-                m = matrixBView;
-                break;
-            case 2:
-                m = matrixCView;
-                break;
-            default:
-                errorToast("what did you do here");
-                m = null;
-                break;
-        }
-
-        m.removeAllViews(); // in case there are some views on m;
-        m.setRowCount(r); // set row count
-        m.setColumnCount(c); // set col count
-
-        // re add Views to GridLayout
-        for(TextView cell : cells){
-            m.addView(cell);
-        }
-
-    }
-
 
     /**
      * Set matrix size. Generate/edit corresponding gridlayout and
@@ -222,49 +187,32 @@ public class MainActivity extends AppCompatActivity {
      * @param c - cols
      */
     private void setMatrixSize(int m, int r, int c){
-        int rows;
-        int cols;
-        GridLayout matrix;
-        ArrayList<TextView> cells;
+        int rows = r;
+        int cols = c;
+        ArrayList<TextView> cells = new ArrayList<TextView>();
 
-        rows = r;
-        cols = c;
-
-        if(m == MATRIX_A){
-
-            matrix = matrixAView;
-            cellsA = new ArrayList<TextView>();
-            cells = cellsA;
-            rowAVal = rows;
-            colAVal = cols;
-        }
-        else{
-
-            matrix = matrixBView;
-            cellsB = new ArrayList<TextView>();
-            cells = cellsB;
-            rowBVal = rows;
-            colBVal = cols;
-
-        }
+        MatrixView matrix = matrixViews.get(m);
+        GridLayout matrixGrid = matrix.getGridLayout();
+        matrix.setCells(cells);
+        matrix.setRows(r);
+        matrix.setCols(c);
 
         // check for valid size input
-        if(rows == -1 || cols == -1){
+        if(r == -1 || c == -1){
             errorToast(getString(R.string.sizeInvalid));
             return;
         }
 
         // clear grid elements
-        matrix.removeAllViews();
+        matrixGrid.removeAllViews();
 
         //proceed to setting matrix sizes
-        matrix.setRowCount(rows);
-        matrix.setColumnCount(cols);
+        matrixGrid.setRowCount(rows);
+        matrixGrid.setColumnCount(cols);
         int numCells =  rows * cols;
 
         // width of grid
-        int gridWidth = matrix.getWidth();
-        Log.i("tag", String.valueOf(matrixAView.getWidth()));
+        int gridWidth = matrixGrid.getWidth();
 
         // add EditText cells to grid. Note that list of cells will go from left to right,
         // until end of row, then left to right of next row, etc.
@@ -289,9 +237,11 @@ public class MainActivity extends AppCompatActivity {
 
 
             cells.add(e); // store reference to each cell in the array
-            matrix.addView(e); // add to View
+            matrixGrid.addView(e); // add to View
+
 
         }
+
 
     }
 
@@ -348,36 +298,38 @@ public class MainActivity extends AppCompatActivity {
      * @param c Result of operation
      */
     private void displayResult(Matrix c){
+        GridLayout matrixCView = matrixC.getGridLayout();
         matrixCView.removeAllViews(); // call in case there's already stuff there
         // set grid layout rows/cols
         matrixCView.setColumnCount(c.getCols());
         matrixCView.setRowCount(c.getRows());
 
-        //stuff for restoring saved instance state
-        rowCVal = c.getRows();
-        colCVal = c.getCols();
+        // assign values to MatrixView object
+        matrixC.setRows(c.getRows());
+        matrixC.setCols(c.getCols());
         ArrayList<TextView> cellsC = new ArrayList<TextView>();
+        matrixC.setCells(cellsC);
 
         ArrayList<Double> vals = c.matrixToList(); // contents of matrix as a list
         int numCells = c.getCols() * c.getRows(); // how many cells matrix will have
 
         int width = matrixCView.getWidth();
-        width = width / colCVal;
+        width = width / matrixC.getCols();
 
         for(int i = 0; i < numCells; i++ ){
             String num = vals.get(i).toString();
             EditText e = new EditText(this);
             e.setText(num);
             e.setMinimumWidth(width);
-            e.setInputType(InputType.TYPE_NULL); // disable editing
+            // e.setInputType(InputType.TYPE_NULL); // disable editing
             matrixCView.addView(e);
-            cellsC.add(e); // stuff for restoring saved instance state
+            matrixC.getCells().add(e); // stuff for restoring saved instance state
         }
 
     }
 
     /**
-     * swap fields of matrixA and matrixB
+     * swap fields of matrixA and matrixB (note, could be matrix C too).
      * @param matrixA matrix referred to by constant
      * @param matrixB
      */
@@ -391,9 +343,18 @@ public class MainActivity extends AppCompatActivity {
      * @param cellValues values
      * @param r rows
      * @param c columns
+     * @precondition values.size() == r * c
      */
     private void setCells(int matrix, ArrayList<Double> cellValues, int r, int c){
         //TODO
+        setMatrixSize(matrix, r, c); // set size
+        GridLayout m = matrixViews.get(matrix).getGridLayout();
+        for(Double d : cellValues){
+
+
+        }
+
+
     }
 
 
