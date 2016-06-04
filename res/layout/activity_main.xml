@@ -185,35 +185,132 @@
                 android:id="@+id/matrixB">
 
             </GridLayout>
+            <HorizontalScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <GridLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="2">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add"
+                        android:id="@+id/add"
+                        />
+
+
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/subtract"
+                        android:id="@+id/sub"
+                        />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/multiply"
+                        android:id="@+id/mul"
+                        />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/multiply"
+                        android:id="@+id/test"
+                        />
+                </GridLayout>
+            </HorizontalScrollView>
 
             <GridLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rowCount="1"
+                android:columnCount="2">
+
+                <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New ToggleButton"
+                    android:id="@+id/toggleButton"
+                    android:textOff="A"
+                    android:textOn="B"
+                    android:checked="false"
+                    android:background="@color/colorAccent"/>
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/horizontalScrollView" >
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inv"
+                            android:id="@+id/inverse" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scalar"
+                            android:id="@+id/scalar" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/trans"
+                            android:id="@+id/transpose" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:ems="10"
+                            android:id="@+id/editText" />
+                    </GridLayout>
+                </HorizontalScrollView>
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="3"
+                android:columnCount="2"
                 android:rowCount="2">
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add"
-                    android:id="@+id/add"
-                    android:layout_columnWeight="1"/>
+                    android:text="@string/det"
+                    android:id="@+id/determinant" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/subtract"
-                    android:id="@+id/sub"
-                    android:layout_columnWeight="1"/>
+                    android:text="@string/rank"
+                    android:id="@+id/rank" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/multiply"
-                    android:id="@+id/mul"
-                    android:layout_columnWeight="1"/>
+                    android:text="@string/swap"
+                    android:id="@+id/swap" />
+
             </GridLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/result"
+                android:id="@+id/textView2" />
 
             <GridLayout
                 android:layout_width="fill_parent"
@@ -226,7 +323,6 @@
             </GridLayout>
         </LinearLayout>
     </ScrollView>
-
 
 
 </LinearLayout>
