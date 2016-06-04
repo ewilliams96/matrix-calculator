@@ -21,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     private final int MATRIX_A = 0;
     private final int MATRIX_B = 1;
     private final int MATRIX_C = 2;
+    // defaults
+    private final int ROW_DEFAULT = 3;
+    private final int COL_DEFAULT = 3;
 
     // matrix A size controls
     private Button setA;
@@ -144,22 +147,31 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: restore bundle
         //default size if nothing previously saved
-        setMatrixSize(MATRIX_A, 3, 3);
-        setMatrixSize(MATRIX_B, 3, 3);
+
 
         //TODO: draw default array cells if no bundle to restore
 
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        setMatrixSize(MATRIX_A, ROW_DEFAULT, COL_DEFAULT);
+        setMatrixSize(MATRIX_B, ROW_DEFAULT, COL_DEFAULT);
+
+    }
+
 
     @Override
-    protected void onPause(){
-        super.onPause();
+    protected void onSaveInstanceState(Bundle savedInstanceState){
+        //TODO
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
-        //TODO: save current displays/dimensions to bundle
-        // save cellsA, cellsB, cellsC, rows/cols for A, B, C
-
-
+    @Override
+    protected void onRestoreInstanceState(Bundle bundle){
+        //TODO
+        super.onRestoreInstanceState(bundle);
     }
 
     /**
@@ -252,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
         // width of grid
         int gridWidth = matrix.getWidth();
+        Log.i("tag", String.valueOf(matrixAView.getWidth()));
 
         // add EditText cells to grid. Note that list of cells will go from left to right,
         // until end of row, then left to right of next row, etc.
@@ -291,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Double> userInputToValues(ArrayList<TextView> input){
         ArrayList<Double> values = new ArrayList<Double>();
         for(TextView t : input){
-            if(t.getText() != null){
+            if(!t.getText().toString().isEmpty()){
                 values.add(Double.parseDouble(t.getText().toString()));
             }
             else{
@@ -361,6 +374,26 @@ public class MainActivity extends AppCompatActivity {
             cellsC.add(e); // stuff for restoring saved instance state
         }
 
+    }
+
+    /**
+     * swap fields of matrixA and matrixB
+     * @param matrixA matrix referred to by constant
+     * @param matrixB
+     */
+    private void swap(int matrixA, int matrixB){
+        //TODO
+    }
+
+    /**
+     * Set the cells of a matrix, given cell values in order, number of rows, and number of columns
+     * @param matrix which matrix
+     * @param cellValues values
+     * @param r rows
+     * @param c columns
+     */
+    private void setCells(int matrix, ArrayList<Double> cellValues, int r, int c){
+        //TODO
     }
 
 
