@@ -18,7 +18,7 @@ public class Matrix {
     //2D array of values in matrix
     double[][] matrix2DArray;
 
-    public Matrix(List<Integer> values, int r, int c){
+    public Matrix(List<Double> values, int r, int c){
         rows = r;
         cols = c;
         matrix2DArray = new double[rows][cols];

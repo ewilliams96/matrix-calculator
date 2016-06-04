@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     // constants to refer to matrices
     private final int MATRIX_A = 0;
     private final int MATRIX_B = 1;
+    private final int MATRIX_C = 2;
 
     // matrix A size controls
     private Button setA;
@@ -35,14 +36,17 @@ public class MainActivity extends AppCompatActivity {
     GridLayout matrixAView;
     GridLayout matrixBView;
     GridLayout matrixCView;
-    ArrayList<EditText> cellsA;
-    ArrayList<EditText> cellsB;
+    ArrayList<TextView> cellsA;
+    ArrayList<TextView> cellsB;
+    ArrayList<TextView> cellsC;
 
     //matrix dimensions
     int rowAVal;
     int colAVal;
     int rowBVal;
     int colBVal;
+    int rowCVal;
+    int colCVal;
 
     //operation buttons
     Button add;
@@ -75,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         setA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               setMatrixSize(MATRIX_A, Integer.valueOf(rowA.getText().toString()),
-                       Integer.valueOf(colA.getText().toString()));
+               setMatrixSize(MATRIX_A, inputToInt(rowA.getText().toString()),
+                       inputToInt(colA.getText().toString()));
             }
         });
 
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                         Integer.valueOf(colB.getText().toString()));
             }
         });
+
         // get operation buttons
         add = (Button) findViewById(R.id.add);
         sub = (Button) findViewById(R.id.sub);
@@ -96,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               ArrayList<Integer> cellAVals = userInputToValues(cellsA);
-               ArrayList<Integer> cellBVals = userInputToValues(cellsB);
+
+               ArrayList<Double> cellAVals = userInputToValues(cellsA);
+               ArrayList<Double> cellBVals = userInputToValues(cellsB);
 
                // if there are blank cells when user tries to perform an operation, break
                if(cellAVals == null || cellBVals == null){
@@ -141,10 +147,51 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
 
-        //TODO: save current displays/dimensions.
+        //TODO: save current displays/dimensions to bundle
+        // save cellsA, cellsB, cellsC, rows/cols for A, B, C
 
 
     }
+
+    /**
+     * Helper method used to restore saved instance state.
+     * @param cells list of textviews/edittexts to extract contents from
+     * @param r rows
+     * @param c cols
+     * @param matrix which matrix (see constants)
+     */
+    private void restoreMatrixView(ArrayList<TextView> cells, int r, int c, int matrix){
+        GridLayout m;
+
+        // switch case to figure out which GridLayout we should be modifying
+        // idea for future: use a hashmap ?
+        switch(matrix){
+            case 0:
+                m = matrixAView;
+                break;
+            case 1:
+                m = matrixBView;
+                break;
+            case 2:
+                m = matrixCView;
+                break;
+            default:
+                errorToast("what did you do here");
+                m = null;
+                break;
+        }
+
+        m.removeAllViews(); // in case there are some views on m;
+        m.setRowCount(r); // set row count
+        m.setColumnCount(c); // set col count
+
+        // re add Views to GridLayout
+        for(TextView cell : cells){
+            m.addView(cell);
+        }
+
+    }
+
 
     /**
      * Set matrix size. Generate/edit corresponding gridlayout and
@@ -157,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         int rows;
         int cols;
         GridLayout matrix;
-        ArrayList<EditText> cells;
+        ArrayList<TextView> cells;
 
         rows = r;
         cols = c;
@@ -165,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         if(m == MATRIX_A){
 
             matrix = matrixAView;
-            cellsA = new ArrayList<EditText>();
+            cellsA = new ArrayList<TextView>();
             cells = cellsA;
             rowAVal = rows;
             colAVal = cols;
@@ -173,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         else{
 
             matrix = matrixBView;
-            cellsB = new ArrayList<EditText>();
+            cellsB = new ArrayList<TextView>();
             cells = cellsB;
             rowBVal = rows;
             colBVal = cols;
@@ -228,20 +275,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Get user input values from EditText fields to separate Matrix from Views.
-     * @param input List of EditText fields
+     * Get user input values from TextView fields to separate Matrix from Views.
+     * @param input List of TextView fields (so can be used in more situations)
      * @return ArrayList<Double> of values from text fields. Null if there are empty text fields.
      */
-    private ArrayList<Integer> userInputToValues(ArrayList<EditText> input){
-        //TODO
-        return null;
-
+    private ArrayList<Double> userInputToValues(ArrayList<TextView> input){
+        ArrayList<Double> values = new ArrayList<Double>();
+        for(TextView t : input){
+            values.add(Double.parseDouble(t.getText().toString()));
+        }
+        return values;
     }
 
 
 
     /**
-     *
+     * Converts  input by user from string to int, also validating input >= 0
+     * since used in generating matrix dimensions.
      * @param input String input by user to convert
      * @return int value of string if valid, otherwise -1
      */
@@ -257,13 +307,17 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    /**
+     * method for making toasts
+     * @param s
+     */
     public void errorToast(String s){
         Toast t = Toast.makeText(this, s, Toast.LENGTH_SHORT);
         t.show();
     }
 
     /**
-     * Display 3rd matrix with results of matrix operation.
+     * Display 3rd matrix with results of matrix operation. (Matrix C)
      * @param c Result of operation
      */
     private void displayResult(Matrix c){
@@ -272,8 +326,12 @@ public class MainActivity extends AppCompatActivity {
         matrixCView.setColumnCount(c.getCols());
         matrixCView.setRowCount(c.getRows());
 
-        ArrayList<Double> vals = c.matrixToList(); // contents of matrix as a list
+        //stuff for restoring saved instance state
+        rowCVal = c.getRows();
+        colCVal = c.getCols();
+        ArrayList<TextView> cellsC = new ArrayList<TextView>();
 
+        ArrayList<Double> vals = c.matrixToList(); // contents of matrix as a list
         int numCells = c.getCols() * c.getRows(); // how many cells matrix will have
 
         for(int i = 0; i < numCells; i++ ){
@@ -281,9 +339,11 @@ public class MainActivity extends AppCompatActivity {
             TextView t = new TextView(this);
             t.setText(num);
             matrixCView.addView(t);
+            cellsC.add(t); // stuff for restoring saved instance state
         }
 
     }
+
 
 
 
