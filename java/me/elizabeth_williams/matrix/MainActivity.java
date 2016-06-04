@@ -140,7 +140,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         //TODO: restore bundle
+        //default size if nothing previously saved
+        setMatrixSize(MATRIX_A, 3, 3);
+        setMatrixSize(MATRIX_B, 3, 3);
 
         //TODO: draw default array cells if no bundle to restore
 
@@ -286,7 +291,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Double> userInputToValues(ArrayList<TextView> input){
         ArrayList<Double> values = new ArrayList<Double>();
         for(TextView t : input){
-            values.add(Double.parseDouble(t.getText().toString()));
+            if(t.getText() != null){
+                values.add(Double.parseDouble(t.getText().toString()));
+            }
+            else{
+                return null; // break if a null text field is encountered
+            }
         }
         return values;
     }
