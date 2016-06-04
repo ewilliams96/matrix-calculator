@@ -338,12 +338,17 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Double> vals = c.matrixToList(); // contents of matrix as a list
         int numCells = c.getCols() * c.getRows(); // how many cells matrix will have
 
+        int width = matrixCView.getWidth();
+        width = width / colCVal;
+
         for(int i = 0; i < numCells; i++ ){
             String num = vals.get(i).toString();
-            TextView t = new TextView(this);
-            t.setText(num);
-            matrixCView.addView(t);
-            cellsC.add(t); // stuff for restoring saved instance state
+            EditText e = new EditText(this);
+            e.setText(num);
+            e.setMinimumWidth(width);
+            e.setInputType(InputType.TYPE_NULL); // disable editing
+            matrixCView.addView(e);
+            cellsC.add(e); // stuff for restoring saved instance state
         }
 
     }

@@ -85,7 +85,7 @@ public class Matrix {
      */
     public Matrix multiply(Matrix otherMatrix){
         //TODO
-        return otherMatrix;
+        return null;
     }
 
 
@@ -97,8 +97,51 @@ public class Matrix {
      */
     public Matrix subtract(Matrix otherMatrix){
         //TODO
-        return otherMatrix;
+        return null;
 
+    }
+
+    /**
+     * Scalar multiplication
+     * @param n scalar
+     * @return result of scalar multiplication
+     */
+    public Matrix scalarMultiply(double n){
+        //TODO
+        return null;
+    }
+
+    /**
+     * Inverse of a matrix
+     * @return
+     */
+    public Matrix inverse(){
+        //TODO
+        return null;
+    }
+
+    /**
+     * Rank of a matrix
+     * @return
+     */
+    public Matrix matrixRank(){
+        return null;
+    }
+
+    /**
+     * Transpose the matrix
+     * @return transposed matrix
+     */
+    public Matrix transpose(){
+        return null;
+    }
+
+    /**
+     * Calculate determinant of matrix
+     * @return
+     */
+    public double determinant(){
+        return 0;
     }
 
     /**
