@@ -1,5 +1,7 @@
 package me.elizabeth_williams.matrix;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +136,28 @@ public class Matrix {
      * @return transposed matrix
      */
     public Matrix transpose(){
-        return null;
+        double[][] transpose = new double[this.cols][this.rows];
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                transpose[j][i] = this.matrix2DArray[i][j];
+
+            }
+        }
+
+        for(int i = 0; i < this.cols; i++){
+            for(int j = 0; j < this.rows; j++){
+                Log.i("new", String.valueOf(transpose[i][j]));
+            }
+        }
+
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                Log.i("old", String.valueOf(this.matrix2DArray[i][j]));
+            }
+        }
+
+        Matrix result = new Matrix(transpose, this.cols, this.rows);
+        return result;
     }
 
     /**

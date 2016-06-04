@@ -21,7 +21,7 @@
     <string name="trans">Transpose</string>
     <string name="scalar">Scale</string>
 
-    <string name="det">Determinant</string>
+    <string name="det">Det</string>
     <string name="rank">Rank</string>
 
 

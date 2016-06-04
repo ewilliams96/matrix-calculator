@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     Button swap2;
     Button swap3;
 
+    ToggleButton tog;
+    Button transpose;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setA = (Button) findViewById(R.id.buttonA);
         rowA = (EditText) findViewById(R.id.editRowsA);
         colA = (EditText) findViewById(R.id.editColsA);
-        GridLayout matrixAView = (GridLayout) findViewById(R.id.matrixA);
+        final GridLayout matrixAView = (GridLayout) findViewById(R.id.matrixA);
 
         //Get matrix B controls from resources
         setB = (Button) findViewById(R.id.buttonB);
@@ -155,11 +160,8 @@ public class MainActivity extends AppCompatActivity {
         swap1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
-                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
 
-                // if there are blank cells when user tries to perform an operation, break
-                if(cellAVals == null || cellBVals == null){
+                if(hasEmptyCell(MATRIX_A) || hasEmptyCell(MATRIX_B)){
                     errorToast(getString(R.string.missingCells));
                     return;
                 }
@@ -170,11 +172,8 @@ public class MainActivity extends AppCompatActivity {
         swap2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
-                ArrayList<Double> cellCVals = userInputToValues(matrixC.getCells());
 
-                // if there are blank cells when user tries to perform an operation, break
-                if(cellBVals == null || cellCVals == null){
+                if(hasEmptyCell(MATRIX_B) || hasEmptyCell(MATRIX_C)){
                     errorToast(getString(R.string.missingCells));
                     return;
                 }
@@ -185,15 +184,46 @@ public class MainActivity extends AppCompatActivity {
         swap3.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
-                ArrayList<Double> cellCVals = userInputToValues(matrixC.getCells());
 
-                // if there are blank cells when user tries to perform an operation, break
-                if(cellAVals == null || cellCVals == null){
+                if(hasEmptyCell(MATRIX_A) || hasEmptyCell(MATRIX_C)){
                     errorToast(getString(R.string.missingCells));
                     return;
                 }
                 swap(MATRIX_A, MATRIX_C);
+            }
+        });
+
+        transpose = (Button) findViewById(R.id.transpose);
+        tog = (ToggleButton) findViewById(R.id.toggleButton);
+        transpose.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                int m;
+                switch(tog.getText().toString()){
+                    case "A":
+                        m = 0;
+                        break;
+                    case "B":
+                        m = 1;
+                        break;
+                    default:
+                        m = -1; // shouldn't happen
+                }
+
+                if(hasEmptyCell(m)){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+                else{
+                    MatrixView matrixv = matrixViews.get(m);
+
+                    Matrix mat = new Matrix(userInputToValues(matrixv.getCells()), matrixv.getRows(), matrixv.getCols());
+                    Matrix result = mat.transpose();
+                    displayResult(result);
+
+                }
+
+
             }
         });
 
@@ -308,6 +338,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return values;
+    }
+
+    /**
+     * Check if a matrix has empty cells
+     * @param matrix
+     * @return
+     */
+    private boolean hasEmptyCell(int matrix){
+
+        for(TextView t : matrixViews.get(matrix).getCells() ){
+            if(t.getText().toString().isEmpty()){
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
