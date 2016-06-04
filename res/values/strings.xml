@@ -5,7 +5,7 @@
     <string name="set">Set</string>
     <string name="rows">Rows</string>
     <string name="cols">Cols</string>
-    <string name="result">Result:</string>
+    <string name="result">Result C:</string>
 
     <!--Operation button strings-->
     <string name="add">A + B</string>
@@ -14,7 +14,9 @@
     <string name="multiply">A * B</string>
     <string name="multiply2">B * A</string>
 
-    <string name="swap">Swap A ↔ B</string>
+    <string name="swap1">Swap A B</string>
+    <string name="swap2">Swap B C</string>
+    <string name="swap3">Swap A C</string>
     <string name="inv">Inverse</string>
     <string name="trans">Transpose</string>
     <string name="scalar">Scale</string>

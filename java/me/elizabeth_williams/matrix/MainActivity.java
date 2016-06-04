@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private Button add;
     private Button sub;
     private Button mul;
-    Button swap;
+    Button swap1;
+    Button swap2;
+    Button swap3;
 
 
     @Override
@@ -103,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
         add = (Button) findViewById(R.id.add);
         sub = (Button) findViewById(R.id.sub);
         mul = (Button) findViewById(R.id.mul);
-        swap = (Button) findViewById(R.id.swap);
+        swap1 = (Button) findViewById(R.id.swap1);
+        swap2 = (Button) findViewById(R.id.swap2);
+        swap3 = (Button) findViewById(R.id.swap3);
+
         // operation listeners
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -147,10 +152,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        swap.setOnClickListener(new View.OnClickListener(){
+        swap1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellBVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
                 swap(MATRIX_A, MATRIX_B);
+            }
+        });
+
+        swap2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+                ArrayList<Double> cellCVals = userInputToValues(matrixC.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellBVals == null || cellCVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+                swap(MATRIX_B, MATRIX_C);
+            }
+        });
+
+        swap3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellCVals = userInputToValues(matrixC.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellCVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+                swap(MATRIX_A, MATRIX_C);
             }
         });
 
@@ -163,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         setMatrixSize(MATRIX_A, ROW_DEFAULT, COL_DEFAULT);
         setMatrixSize(MATRIX_B, ROW_DEFAULT, COL_DEFAULT);
+        setMatrixSize(MATRIX_C, ROW_DEFAULT, COL_DEFAULT);
+
 
     }
 

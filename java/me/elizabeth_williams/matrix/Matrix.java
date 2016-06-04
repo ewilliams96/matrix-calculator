@@ -61,7 +61,7 @@ public class Matrix {
      * @return result of matrix addition, null if invalid operation
      */
     public Matrix add(Matrix otherMatrix){
-       
+
         if(this.rows != otherMatrix.rows || this.cols != otherMatrix.cols){
 
             return null;
