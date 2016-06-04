@@ -31,13 +31,19 @@ public class Matrix {
 
     /**
      * Add two matrices.
-     * @precondition otherMatrix is of same dimensions as this matrix
+     * @precondition otherMatrix is of same dimensions as this matrix. If not, returns null
      * @param otherMatrix
-     * @return result of matrix addition
+     * @return result of matrix addition, null if invalid operation
      */
     public Matrix add(Matrix otherMatrix){
-       //TODO
-       return otherMatrix;
+        //for now
+        return null;
+        //check if valid operation
+        /*if(this.rows != otherMatrix.rows || this.cols != otherMatrix.cols){
+            return null;
+        }
+        //TODO actual addition
+       return otherMatrix;*/
     }
 
     /**

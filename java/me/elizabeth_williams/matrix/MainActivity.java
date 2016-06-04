@@ -112,13 +112,15 @@ public class MainActivity extends AppCompatActivity {
                    return;
                }
 
-                if(rowAVal != rowBVal || colAVal != colBVal){
-                    errorToast(getString(R.string.wrongSize));
-                    return;
-                }
+
                Matrix mA = new Matrix(cellAVals, rowAVal, colAVal);
                Matrix mB = new Matrix(cellBVals, rowBVal, colBVal);
                Matrix matrixResult = mA.add(mB);
+
+               // if result matrix is null
+               if(matrixResult == null){
+                   errorToast(getString(R.string.wrongSize));
+               }
 
                errorToast("Not implemented yet");
             }
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             EditText e = new EditText(this);
 
             // get number input only
-            e.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            e.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
             int colWidth = gridWidth/cols; // set min width of columns
             e.setMinimumWidth(colWidth);
