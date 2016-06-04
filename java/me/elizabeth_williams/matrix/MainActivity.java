@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     MatrixView matrixA;
     MatrixView matrixB;
     MatrixView matrixC;
-    
+
     // defaults
     private final int ROW_DEFAULT = 3;
     private final int COL_DEFAULT = 3;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private Button add;
     private Button sub;
     private Button mul;
+    Button swap;
 
 
     @Override
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         add = (Button) findViewById(R.id.add);
         sub = (Button) findViewById(R.id.sub);
         mul = (Button) findViewById(R.id.mul);
+        swap = (Button) findViewById(R.id.swap);
         // operation listeners
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -114,11 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
                // if there are blank cells when user tries to perform an operation, break
                if(cellAVals == null || cellBVals == null){
-                   Log.i("tag", "null cell");
                    errorToast(getString(R.string.missingCells));
                    return;
                }
-
 
                Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
                Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
@@ -127,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                // if result matrix is null
                if(matrixResult == null){
                    errorToast(getString(R.string.wrongSize));
+                   return;
                }
 
                displayResult(matrixResult);
@@ -147,13 +147,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        swap.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                swap(MATRIX_A, MATRIX_B);
+            }
+        });
 
 
-        //TODO: restore bundle
-        //default size if nothing previously saved
-
-
-        //TODO: draw default array cells if no bundle to restore
 
     }
 
@@ -334,7 +335,21 @@ public class MainActivity extends AppCompatActivity {
      * @param matrixB
      */
     private void swap(int matrixA, int matrixB){
-        //TODO
+        MatrixView mva = matrixViews.get(matrixA);
+        MatrixView mvb = matrixViews.get(matrixB);
+
+        // save B
+        int bRow = mvb.getRows();
+        int bCols = mvb.getCols();
+        ArrayList<Double> valuesB = userInputToValues(mvb.getCells());
+
+        // set B to values of A
+        ArrayList<Double> valuesA = userInputToValues(mva.getCells());
+        setCells(matrixB, valuesA, mva.getRows(), mva.getCols());
+
+        // now set A to B
+        setCells(matrixA, valuesB, bRow, bCols);
+
     }
 
     /**
@@ -348,10 +363,10 @@ public class MainActivity extends AppCompatActivity {
     private void setCells(int matrix, ArrayList<Double> cellValues, int r, int c){
         //TODO
         setMatrixSize(matrix, r, c); // set size
-        GridLayout m = matrixViews.get(matrix).getGridLayout();
-        for(Double d : cellValues){
-
-
+        MatrixView m = matrixViews.get(matrix);
+        GridLayout matrixGrid = matrixViews.get(matrix).getGridLayout();
+        for(int i = 0; i < cellValues.size(); i++){
+            m.getCells().get(i).setText(String.valueOf(cellValues.get(i)));
         }
 
 

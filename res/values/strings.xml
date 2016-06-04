@@ -4,7 +4,7 @@
     <string name="matrB">Matrix B</string>
     <string name="set">Set</string>
     <string name="rows">Rows</string>
-    <string name="cols">Columns</string>
+    <string name="cols">Cols</string>
     <string name="result">Result:</string>
 
     <!--Operation button strings-->
