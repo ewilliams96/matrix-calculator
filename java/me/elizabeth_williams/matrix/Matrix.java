@@ -199,6 +199,23 @@ public class Matrix {
         return values;
     }
 
+    /**
+     * Change dimensions of matrix to specified rows/cols, preserving cells when possible
+     * @param r
+     * @param c
+     * @return
+     */
+    public Matrix changeDimensions(int r, int c){
+        double[][] newMatrixArray = new double[r][c];
+        for(int i = 0; i < this.getRows(); i++){
+            for(int j = 0; j < this.getCols(); j++){
+                newMatrixArray[i][j] = this.matrix2DArray[i][j];
+            }
+        }
+        Matrix newMatrix = new Matrix(newMatrixArray, r, c);
+        return newMatrix;
+    }
+
 
 
 

@@ -1,11 +1,9 @@
 package me.elizabeth_williams.matrix;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -93,8 +91,17 @@ public class MainActivity extends AppCompatActivity {
         setA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Matrix old = null;
+               if(!hasEmptyCell(MATRIX_A)){
+                   old = new Matrix(userInputToValues(matrixA.getCells()), matrixA.getRows(), matrixA.getCols());
+               }
                setMatrixSize(MATRIX_A, inputToInt(rowA.getText().toString()),
                        inputToInt(colA.getText().toString()));
+               if(!hasEmptyCell(MATRIX_A)){
+                   Matrix sizeAdjust = old.changeDimensions(inputToInt(rowA.getText().toString()), inputToInt(colA.getText().toString()));
+                   displayResult(sizeAdjust, matrixA);
+               }
+
             }
         });
 
@@ -113,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         swap1 = (Button) findViewById(R.id.swap1);
         swap2 = (Button) findViewById(R.id.swap2);
         swap3 = (Button) findViewById(R.id.swap3);
+
 
         // operation listeners
 
@@ -139,7 +147,9 @@ public class MainActivity extends AppCompatActivity {
                    return;
                }
 
-               displayResult(matrixResult);
+
+
+               displayResult(matrixResult, matrixC);
             }
         });
 
@@ -199,15 +209,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 int m;
+                MatrixView mView;
                 switch(tog.getText().toString()){
                     case "A":
                         m = 0;
+                        mView = matrixA;
                         break;
                     case "B":
                         m = 1;
+                        mView = matrixB;
                         break;
                     default:
                         m = -1; // shouldn't happen
+                        mView = null;
                 }
 
                 if(hasEmptyCell(m)){
@@ -219,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Matrix mat = new Matrix(userInputToValues(matrixv.getCells()), matrixv.getRows(), matrixv.getCols());
                     Matrix result = mat.transpose();
-                    displayResult(result);
+                    displayResult(result, mView);
 
                 }
 
@@ -303,13 +317,13 @@ public class MainActivity extends AppCompatActivity {
             e.setMinimumWidth(colWidth);
 
             // hide keyboard since the focus change doesn't work as I'd like right now
-            e.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /*e.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     InputMethodManager imm =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
-            });
+            });*/
 
 
             cells.add(e); // store reference to each cell in the array
@@ -389,24 +403,24 @@ public class MainActivity extends AppCompatActivity {
      * Display 3rd matrix with results of matrix operation. (Matrix C)
      * @param c Result of operation
      */
-    private void displayResult(Matrix c){
-        GridLayout matrixCView = matrixC.getGridLayout();
+    private void displayResult(Matrix c, MatrixView n){
+        GridLayout matrixCView = n.getGridLayout();
         matrixCView.removeAllViews(); // call in case there's already stuff there
         // set grid layout rows/cols
         matrixCView.setColumnCount(c.getCols());
         matrixCView.setRowCount(c.getRows());
 
         // assign values to MatrixView object
-        matrixC.setRows(c.getRows());
-        matrixC.setCols(c.getCols());
+        n.setRows(c.getRows());
+        n.setCols(c.getCols());
         ArrayList<TextView> cellsC = new ArrayList<TextView>();
-        matrixC.setCells(cellsC);
+        n.setCells(cellsC);
 
         ArrayList<Double> vals = c.matrixToList(); // contents of matrix as a list
         int numCells = c.getCols() * c.getRows(); // how many cells matrix will have
 
         int width = matrixCView.getWidth();
-        width = width / matrixC.getCols();
+        width = width / n.getCols();
 
         for(int i = 0; i < numCells; i++ ){
             String num = vals.get(i).toString();
@@ -415,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
             e.setMinimumWidth(width);
             // e.setInputType(InputType.TYPE_NULL); // disable editing
             matrixCView.addView(e);
-            matrixC.getCells().add(e); // stuff for restoring saved instance state
+            n.getCells().add(e); // stuff for restoring saved instance state
         }
 
     }
