@@ -313,14 +313,14 @@ public class MainActivity extends AppCompatActivity {
                     case "A":
                         m = 0;
                         mView = matrixA;
-                        setRow = setARow;
-                        setCol = setBCol;
+                        setRow = rowA;
+                        setCol = colA;
                         break;
                     case "B":
                         m = 1;
                         mView = matrixB;
-                        setRow = setARow;
-                        setCol = setBCol;
+                        setRow = rowB;
+                        setCol = colB;
                         break;
                     default:
                         m = -1; // shouldn't happen
