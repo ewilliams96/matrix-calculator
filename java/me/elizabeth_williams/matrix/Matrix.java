@@ -201,14 +201,33 @@ public class Matrix {
 
     /**
      * Change dimensions of matrix to specified rows/cols, preserving cells when possible
+     * note: initializes to zero because java
      * @param r
      * @param c
      * @return
      */
     public Matrix changeDimensions(int r, int c){
         double[][] newMatrixArray = new double[r][c];
-        for(int i = 0; i < this.getRows(); i++){
-            for(int j = 0; j < this.getCols(); j++){
+        int rowBounds;
+        int colBounds;
+
+        // avoid array out of bounds if going bigger or smaller
+        if(r > this.getRows()){
+            rowBounds = this.getRows();
+        }
+        else{
+            rowBounds = r;
+        }
+
+        if(c > this.getCols()){
+            colBounds = this.getCols();
+        }
+        else{
+            colBounds = c;
+        }
+
+        for(int i = 0; i < rowBounds; i++){
+            for(int j = 0; j < colBounds; j++){
                 newMatrixArray[i][j] = this.matrix2DArray[i][j];
             }
         }

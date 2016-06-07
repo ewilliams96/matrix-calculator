@@ -92,14 +92,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Matrix old = null;
+                boolean notEmpty = false;
                if(!hasEmptyCell(MATRIX_A)){
                    old = new Matrix(userInputToValues(matrixA.getCells()), matrixA.getRows(), matrixA.getCols());
+                   notEmpty = true;
                }
                setMatrixSize(MATRIX_A, inputToInt(rowA.getText().toString()),
                        inputToInt(colA.getText().toString()));
-               if(!hasEmptyCell(MATRIX_A)){
+               if(notEmpty){
+                   //int oldr = old.getRows();
+                   //int oldc = old.getCols();
                    Matrix sizeAdjust = old.changeDimensions(inputToInt(rowA.getText().toString()), inputToInt(colA.getText().toString()));
                    displayResult(sizeAdjust, matrixA);
+                   //clearRows(matrixA, oldr, sizeAdjust.getRows() );
                }
 
             }
@@ -424,6 +429,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < numCells; i++ ){
             String num = vals.get(i).toString();
+            num = num.indexOf(".") < 0 ? num : num.replaceAll("0*$", "").replaceAll("\\.$", "");
             EditText e = new EditText(this);
             e.setText(num);
             e.setMinimumWidth(width);
@@ -471,9 +477,40 @@ public class MainActivity extends AppCompatActivity {
         MatrixView m = matrixViews.get(matrix);
         GridLayout matrixGrid = matrixViews.get(matrix).getGridLayout();
         for(int i = 0; i < cellValues.size(); i++){
+            String num = String.valueOf(cellValues.get(i));
+            num = num.indexOf(".") < 0 ? num : num.replaceAll("0*$", "").replaceAll("\\.$", "");
             m.getCells().get(i).setText(String.valueOf(cellValues.get(i)));
         }
 
+
+    }
+
+    /**
+     * Clear range of rows.
+     * @param m MatrixView to be cleared
+     * @param rstart start row index. inclusive
+     * @param rfinish end row index. exclusive
+     */
+    private void clearRows(MatrixView m, int rstart, int rfinish){
+        GridLayout gl = m.getGridLayout();
+        int c = gl.getColumnCount();
+        int r = gl.getRowCount();
+        ArrayList<TextView[]> rows = new ArrayList<TextView[]>();
+        for(int i = 0; i < r; i ++){
+            TextView[] tRow = new TextView[c];
+            for(int j = 0; j < c; j++){
+                tRow[j] = m.getCells().get(i*j + j);
+
+            }
+            rows.add(tRow);
+        }
+
+        for(int i = rstart; i < rfinish; i++){
+            TextView[] currentRow = rows.get(i);
+            for(int j = 0; j < currentRow.length; j++){
+                currentRow[j].setText("");
+            }
+        }
 
     }
 
