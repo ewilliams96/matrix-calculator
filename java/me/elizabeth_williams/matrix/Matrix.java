@@ -63,9 +63,7 @@ public class Matrix {
      * @return result of matrix addition, null if invalid operation
      */
     public Matrix add(Matrix otherMatrix){
-
         if(this.rows != otherMatrix.rows || this.cols != otherMatrix.cols){
-
             return null;
         }
 
@@ -100,7 +98,19 @@ public class Matrix {
      */
     public Matrix subtract(Matrix otherMatrix){
         //TODO
-        return null;
+        if(this.rows != otherMatrix.rows || this.cols != otherMatrix.cols){
+            return null;
+        }
+
+        double[][] resultArr = new double[this.rows][this.cols];
+
+        for(int i = 0; i < rows; i++ ){
+            for(int j = 0; j < cols; j++){
+                resultArr[i][j] = this.matrix2DArray[i][j] - otherMatrix.matrix2DArray[i][j];
+            }
+        }
+
+        return new Matrix(resultArr, this.rows, this.cols);
 
     }
 
@@ -110,8 +120,13 @@ public class Matrix {
      * @return result of scalar multiplication
      */
     public Matrix scalarMultiply(double n){
-        //TODO
-        return null;
+        double[][] newArray = new double[this.rows][this.cols];
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                newArray[i][j] = this.matrix2DArray[i][j] * n;
+            }
+        }
+        return new Matrix(newArray, this.rows, this.cols);
     }
 
     /**
@@ -156,8 +171,8 @@ public class Matrix {
             }
         }
 
-        Matrix result = new Matrix(transpose, this.cols, this.rows);
-        return result;
+        return new Matrix(transpose, this.cols, this.rows);
+
     }
 
     /**
@@ -165,6 +180,7 @@ public class Matrix {
      * @return
      */
     public double determinant(){
+        //TODO
         return 0;
     }
 
@@ -231,8 +247,8 @@ public class Matrix {
                 newMatrixArray[i][j] = this.matrix2DArray[i][j];
             }
         }
-        Matrix newMatrix = new Matrix(newMatrixArray, r, c);
-        return newMatrix;
+        return new Matrix(newMatrixArray, r, c);
+
     }
 
 

@@ -191,8 +191,7 @@
                 <GridLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="4"
-                    android:rowCount="2">
+                    android:rowCount="1">
 
                     <Button
                         android:layout_width="wrap_content"
@@ -213,6 +212,13 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/subtract2"
+                        android:id="@+id/sub2"
+                        />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/multiply"
                         android:id="@+id/mul"
                         />
@@ -220,8 +226,8 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/multiply"
-                        android:id="@+id/test"
+                        android:text="@string/multiply2"
+                        android:id="@+id/mul2"
                         />
                 </GridLayout>
             </HorizontalScrollView>
@@ -254,6 +260,12 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@string/trans"
+                            android:id="@+id/transpose" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="@string/inv"
                             android:id="@+id/inverse" />
 
@@ -263,18 +275,14 @@
                             android:text="@string/scalar"
                             android:id="@+id/scalar" />
 
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/trans"
-                            android:id="@+id/transpose" />
+
 
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:inputType="numberSigned"
                             android:ems="10"
-                            android:id="@+id/editText" />
+                            android:id="@+id/scaleNum" />
                     </GridLayout>
                 </HorizontalScrollView>
             </GridLayout>

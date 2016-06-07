@@ -45,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
     //operation buttons
     private Button add;
     private Button sub;
+    private Button sub2;
     private Button mul;
+    private Button mul2;
     Button swap1;
     Button swap2;
     Button swap3;
 
     ToggleButton tog;
     Button transpose;
+    Button scale;
+    EditText scaleNum;
 
 
 
@@ -86,26 +90,60 @@ public class MainActivity extends AppCompatActivity {
         matrixViews.put(MATRIX_B, matrixB);
         matrixViews.put(MATRIX_C, matrixC);
 
+        // set listeners for buttons
+        setOnClickListeners();
+    }
 
+    /**
+     * Initialize blank matrices of default size when starting app
+     * @param hasFocus
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        setMatrixSize(MATRIX_A, ROW_DEFAULT, COL_DEFAULT);
+        setMatrixSize(MATRIX_B, ROW_DEFAULT, COL_DEFAULT);
+        setMatrixSize(MATRIX_C, ROW_DEFAULT, COL_DEFAULT);
+
+
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState){
+        //TODO
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle bundle){
+        //TODO
+        super.onRestoreInstanceState(bundle);
+    }
+
+    /**
+     * Helper method to reduce length of onCreate method
+     */
+    private void setOnClickListeners(){
         // listeners for setting matrix size
         setA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Matrix old = null;
                 boolean notEmpty = false;
-               if(!hasEmptyCell(MATRIX_A)){
-                   old = new Matrix(userInputToValues(matrixA.getCells()), matrixA.getRows(), matrixA.getCols());
-                   notEmpty = true;
-               }
-               setMatrixSize(MATRIX_A, inputToInt(rowA.getText().toString()),
-                       inputToInt(colA.getText().toString()));
-               if(notEmpty){
-                   //int oldr = old.getRows();
-                   //int oldc = old.getCols();
-                   Matrix sizeAdjust = old.changeDimensions(inputToInt(rowA.getText().toString()), inputToInt(colA.getText().toString()));
-                   displayResult(sizeAdjust, matrixA);
-                   //clearRows(matrixA, oldr, sizeAdjust.getRows() );
-               }
+                if(!hasEmptyCell(MATRIX_A)){
+                    old = new Matrix(userInputToValues(matrixA.getCells()), matrixA.getRows(), matrixA.getCols());
+                    notEmpty = true;
+                }
+                setMatrixSize(MATRIX_A, inputToInt(rowA.getText().toString()),
+                        inputToInt(colA.getText().toString()));
+                if(notEmpty){
+                    //int oldr = old.getRows();
+                    //int oldc = old.getCols();
+                    Matrix sizeAdjust = old.changeDimensions(inputToInt(rowA.getText().toString()), inputToInt(colA.getText().toString()));
+                    displayResult(sizeAdjust, matrixA);
+                    //clearRows(matrixA, oldr, sizeAdjust.getRows() );
+                }
 
             }
         });
@@ -121,10 +159,14 @@ public class MainActivity extends AppCompatActivity {
         // get operation buttons
         add = (Button) findViewById(R.id.add);
         sub = (Button) findViewById(R.id.sub);
+        sub2 = (Button) findViewById(R.id.sub2);
         mul = (Button) findViewById(R.id.mul);
+        mul2 = (Button) findViewById(R.id.mul2);
         swap1 = (Button) findViewById(R.id.swap1);
         swap2 = (Button) findViewById(R.id.swap2);
         swap3 = (Button) findViewById(R.id.swap3);
+        scale = (Button) findViewById(R.id.scalar);
+        scaleNum = (EditText) findViewById(R.id.scaleNum);
 
 
         // operation listeners
@@ -133,39 +175,89 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
-               ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
 
-               // if there are blank cells when user tries to perform an operation, break
-               if(cellAVals == null || cellBVals == null){
-                   errorToast(getString(R.string.missingCells));
-                   return;
-               }
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellBVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
 
-               Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
-               Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
-               Matrix matrixResult = mA.add(mB);
+                Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
+                Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
+                Matrix matrixResult = mA.add(mB);
 
-               // if result matrix is null
-               if(matrixResult == null){
-                   errorToast(getString(R.string.wrongSize));
-                   return;
-               }
+                // if result matrix is null
+                if(matrixResult == null){
+                    errorToast(getString(R.string.wrongSize));
+                    return;
+                }
 
-
-
-               displayResult(matrixResult, matrixC);
+                displayResult(matrixResult, matrixC);
             }
         });
 
         sub.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-               errorToast("Not implemented yet");
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellBVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+
+                Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
+                Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
+                Matrix matrixResult = mA.subtract(mB);
+
+                // if result matrix is null
+                if(matrixResult == null){
+                    errorToast(getString(R.string.wrongSize));
+                    return;
+                }
+
+                displayResult(matrixResult, matrixC);
+            }
+        });
+
+        sub2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellBVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+
+                Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
+                Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
+                Matrix matrixResult = mB.subtract(mA);
+
+                // if result matrix is null
+                if(matrixResult == null){
+                    errorToast(getString(R.string.wrongSize));
+                    return;
+                }
+
+                displayResult(matrixResult, matrixC);
             }
         });
 
         mul.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                errorToast("Not implemented yet");
+            }
+        });
+
+        mul2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 errorToast("Not implemented yet");
@@ -215,18 +307,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 int m;
                 MatrixView mView;
+                EditText setRow;
+                EditText setCol;
                 switch(tog.getText().toString()){
                     case "A":
                         m = 0;
                         mView = matrixA;
+                        setRow = setARow;
+                        setCol = setBCol;
                         break;
                     case "B":
                         m = 1;
                         mView = matrixB;
+                        setRow = setARow;
+                        setCol = setBCol;
                         break;
                     default:
                         m = -1; // shouldn't happen
                         mView = null;
+                        setRow = null;
+                        setCol = null;
                 }
 
                 if(hasEmptyCell(m)){
@@ -239,6 +339,10 @@ public class MainActivity extends AppCompatActivity {
                     Matrix mat = new Matrix(userInputToValues(matrixv.getCells()), matrixv.getRows(), matrixv.getCols());
                     Matrix result = mat.transpose();
                     displayResult(result, mView);
+                    int oldRows = mat.getRows();
+                    int oldCols = mat.getCols();
+                    setRow.setText(String.valueOf(oldCols));
+                    setCol.setText(String.valueOf(oldRows));
 
                 }
 
@@ -246,31 +350,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        scale.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                double scale;
+                if(hasEmptyCell(MATRIX_A)){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+                if(scaleNum.getText().toString().isEmpty()){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+                scale = Double.valueOf(scaleNum.getText().toString());
+                MatrixView mView;
+                switch(tog.getText().toString()){
+                    case "A":
+                        mView = matrixA;
+                        break;
+                    case "B":
+                        mView = matrixB;
+                        break;
+                    default:
+                        mView = null;
+                }
+
+                Matrix operand = new Matrix(userInputToValues(mView.getCells()), mView.getRows(), mView.getCols());
+                displayResult(operand.scalarMultiply(scale), mView);
 
 
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-        setMatrixSize(MATRIX_A, ROW_DEFAULT, COL_DEFAULT);
-        setMatrixSize(MATRIX_B, ROW_DEFAULT, COL_DEFAULT);
-        setMatrixSize(MATRIX_C, ROW_DEFAULT, COL_DEFAULT);
-
-
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState){
-        //TODO
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle bundle){
-        //TODO
-        super.onRestoreInstanceState(bundle);
+            }
+        });
     }
 
 
@@ -434,6 +544,7 @@ public class MainActivity extends AppCompatActivity {
             e.setText(num);
             e.setMinimumWidth(width);
             // e.setInputType(InputType.TYPE_NULL); // disable editing
+            e.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_CLASS_NUMBER);
             matrixCView.addView(e);
             n.getCells().add(e); // stuff for restoring saved instance state
         }
