@@ -3,6 +3,7 @@ package me.elizabeth_williams.matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
         // set listeners for buttons
         setOnClickListeners();
+
+        setMatrixSize(matrixA, ROW_DEFAULT, COL_DEFAULT);
+        setMatrixSize(matrixB, ROW_DEFAULT, COL_DEFAULT);
+        setMatrixSize(matrixC, ROW_DEFAULT, COL_DEFAULT);
     }
 
     /**
@@ -100,26 +105,20 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
+
         super.onWindowFocusChanged(hasFocus);
-        setMatrixSize(MATRIX_A, ROW_DEFAULT, COL_DEFAULT);
-        setMatrixSize(MATRIX_B, ROW_DEFAULT, COL_DEFAULT);
-        setMatrixSize(MATRIX_C, ROW_DEFAULT, COL_DEFAULT);
 
+        for(Integer currentKey : matrixViews.keySet()){
+            MatrixView m = matrixViews.get(currentKey);
+            int col = m.getCols();
+            int screenWidth = m.getGridLayout().getWidth();
+            for(TextView t : m.getCells()){
+                t.setWidth(screenWidth/col);
+            }
+        }
 
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState){
-        //TODO
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle bundle){
-        //TODO
-        super.onRestoreInstanceState(bundle);
-    }
 
     /**
      * Helper method to reduce length of onCreate method
@@ -131,11 +130,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Matrix old = null;
                 boolean notEmpty = false;
-                if(!hasEmptyCell(MATRIX_A)){
+                if(!hasEmptyCell(matrixA)){
                     old = new Matrix(userInputToValues(matrixA.getCells()), matrixA.getRows(), matrixA.getCols());
                     notEmpty = true;
                 }
-                setMatrixSize(MATRIX_A, inputToInt(rowA.getText().toString()),
+                setMatrixSize(matrixA, inputToInt(rowA.getText().toString()),
                         inputToInt(colA.getText().toString()));
                 if(notEmpty){
                     //int oldr = old.getRows();
@@ -151,8 +150,21 @@ public class MainActivity extends AppCompatActivity {
         setB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setMatrixSize(MATRIX_B, Integer.valueOf(rowB.getText().toString()),
-                        Integer.valueOf(colB.getText().toString()));
+                Matrix old = null;
+                boolean notEmpty = false;
+                if(!hasEmptyCell(matrixB)){
+                    old = new Matrix(userInputToValues(matrixB.getCells()), matrixB.getRows(), matrixB.getCols());
+                    notEmpty = true;
+                }
+                setMatrixSize(matrixB, inputToInt(rowB.getText().toString()),
+                        inputToInt(colB.getText().toString()));
+                if(notEmpty){
+                    //int oldr = old.getRows();
+                    //int oldc = old.getCols();
+                    Matrix sizeAdjust = old.changeDimensions(inputToInt(rowB.getText().toString()), inputToInt(colB.getText().toString()));
+                    displayResult(sizeAdjust, matrixB);
+                    //clearRows(matrixA, oldr, sizeAdjust.getRows() );
+                }
             }
         });
 
@@ -268,11 +280,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                if(hasEmptyCell(MATRIX_A) || hasEmptyCell(MATRIX_B)){
+                if(hasEmptyCell(matrixA) || hasEmptyCell(matrixB)){
                     errorToast(getString(R.string.missingCells));
                     return;
                 }
-                swap(MATRIX_A, MATRIX_B);
+                swap(matrixA, matrixB);
             }
         });
 
@@ -280,11 +292,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                if(hasEmptyCell(MATRIX_B) || hasEmptyCell(MATRIX_C)){
+                if(hasEmptyCell(matrixB) || hasEmptyCell(matrixC)){
                     errorToast(getString(R.string.missingCells));
                     return;
                 }
-                swap(MATRIX_B, MATRIX_C);
+                swap(matrixB, matrixC);
             }
         });
 
@@ -292,11 +304,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                if(hasEmptyCell(MATRIX_A) || hasEmptyCell(MATRIX_C)){
+                if(hasEmptyCell(matrixA) || hasEmptyCell(matrixC)){
                     errorToast(getString(R.string.missingCells));
                     return;
                 }
-                swap(MATRIX_A, MATRIX_C);
+                swap(matrixA, matrixC);
             }
         });
 
@@ -305,28 +317,29 @@ public class MainActivity extends AppCompatActivity {
         transpose.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                int m;
+                MatrixView m;
                 MatrixView mView;
                 EditText setRow;
                 EditText setCol;
                 switch(tog.getText().toString()){
                     case "A":
-                        m = 0;
+                        m = matrixA;
                         mView = matrixA;
                         setRow = rowA;
                         setCol = colA;
                         break;
                     case "B":
-                        m = 1;
+                        m = matrixB;
                         mView = matrixB;
                         setRow = rowB;
                         setCol = colB;
                         break;
                     default:
-                        m = -1; // shouldn't happen
+                        m = null; // shouldn't happen
                         mView = null;
                         setRow = null;
                         setCol = null;
+                        return;
                 }
 
                 if(hasEmptyCell(m)){
@@ -334,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 else{
-                    MatrixView matrixv = matrixViews.get(m);
+                    MatrixView matrixv = m;
 
                     Matrix mat = new Matrix(userInputToValues(matrixv.getCells()), matrixv.getRows(), matrixv.getCols());
                     Matrix result = mat.transpose();
@@ -349,15 +362,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        scale.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_SIGNED|InputType.TYPE_NUMBER_FLAG_DECIMAL);
         scale.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 double scale;
-                if(hasEmptyCell(MATRIX_A)){
-                    errorToast(getString(R.string.missingCells));
-                    return;
-                }
+
                 if(scaleNum.getText().toString().isEmpty()){
                     errorToast(getString(R.string.missingCells));
                     return;
@@ -373,6 +383,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     default:
                         mView = null;
+                }
+
+                if(hasEmptyCell(mView)){
+                    errorToast(getString(R.string.missingCells));
+                    return;
                 }
 
                 Matrix operand = new Matrix(userInputToValues(mView.getCells()), mView.getRows(), mView.getCols());
@@ -391,12 +406,12 @@ public class MainActivity extends AppCompatActivity {
      * @param r - rows
      * @param c - cols
      */
-    private void setMatrixSize(int m, int r, int c){
+    private void setMatrixSize(MatrixView m, int r, int c){
         int rows = r;
         int cols = c;
         ArrayList<TextView> cells = new ArrayList<TextView>();
 
-        MatrixView matrix = matrixViews.get(m);
+        MatrixView matrix = m;
         GridLayout matrixGrid = matrix.getGridLayout();
         matrix.setCells(cells);
         matrix.setRows(r);
@@ -424,7 +439,8 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < numCells; i++){
             EditText e = new EditText(this);
-
+            e.setId(View.generateViewId()); // generate ID to save contents
+            e.setText("0"); //init values to 0
             // get number input only
             e.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_CLASS_NUMBER);
 
@@ -471,12 +487,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Check if a matrix has empty cells
-     * @param matrix
+     * @param m
      * @return
      */
-    private boolean hasEmptyCell(int matrix){
+    private boolean hasEmptyCell(MatrixView m){
 
-        for(TextView t : matrixViews.get(matrix).getCells() ){
+        for(TextView t : m.getCells() ){
             if(t.getText().toString().isEmpty()){
                 return true;
             }
@@ -541,6 +557,7 @@ public class MainActivity extends AppCompatActivity {
             String num = vals.get(i).toString();
             num = num.indexOf(".") < 0 ? num : num.replaceAll("0*$", "").replaceAll("\\.$", "");
             EditText e = new EditText(this);
+            e.setId(View.generateViewId()); //set id to save contents
             e.setText(num);
             e.setMinimumWidth(width);
             // e.setInputType(InputType.TYPE_NULL); // disable editing
@@ -553,21 +570,20 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * swap fields of matrixA and matrixB (note, could be matrix C too).
-     * @param matrixA matrix referred to by constant
-     * @param matrixB
+     * @param a matrix
+     * @param b
      */
-    private void swap(int matrixA, int matrixB){
-        MatrixView mva = matrixViews.get(matrixA);
-        MatrixView mvb = matrixViews.get(matrixB);
+    private void swap(MatrixView a, MatrixView b){
+
 
         // save B
-        int bRow = mvb.getRows();
-        int bCols = mvb.getCols();
-        ArrayList<Double> valuesB = userInputToValues(mvb.getCells());
+        int bRow = b.getRows();
+        int bCols = b.getCols();
+        ArrayList<Double> valuesB = userInputToValues(b.getCells());
 
         // set B to values of A
-        ArrayList<Double> valuesA = userInputToValues(mva.getCells());
-        setCells(matrixB, valuesA, mva.getRows(), mva.getCols());
+        ArrayList<Double> valuesA = userInputToValues(a.getCells());
+        setCells(matrixB, valuesA, a.getRows(), a.getCols());
 
         // now set A to B
         setCells(matrixA, valuesB, bRow, bCols);
@@ -576,25 +592,28 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set the cells of a matrix, given cell values in order, number of rows, and number of columns
-     * @param matrix which matrix
+     * @param m which matrix
      * @param cellValues values
      * @param r rows
      * @param c columns
      * @precondition values.size() == r * c
      */
-    private void setCells(int matrix, ArrayList<Double> cellValues, int r, int c){
+    private void setCells(MatrixView m, ArrayList<Double> cellValues, int r, int c){
         //TODO
-        setMatrixSize(matrix, r, c); // set size
-        MatrixView m = matrixViews.get(matrix);
-        GridLayout matrixGrid = matrixViews.get(matrix).getGridLayout();
+        setMatrixSize(m, r, c); // set size
+        GridLayout matrixGrid = m.getGridLayout();
         for(int i = 0; i < cellValues.size(); i++){
             String num = String.valueOf(cellValues.get(i));
             num = num.indexOf(".") < 0 ? num : num.replaceAll("0*$", "").replaceAll("\\.$", "");
+            Log.i("oldCell", m.getCells().get(i).getText().toString());
             m.getCells().get(i).setText(String.valueOf(cellValues.get(i)));
+            Log.i("cell", String.valueOf(num));
         }
 
 
     }
+
+
 
     /**
      * Clear range of rows.
