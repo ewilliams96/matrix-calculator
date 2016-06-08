@@ -583,10 +583,12 @@ public class MainActivity extends AppCompatActivity {
 
         // set B to values of A
         ArrayList<Double> valuesA = userInputToValues(a.getCells());
-        setCells(matrixB, valuesA, a.getRows(), a.getCols());
+        displayResult(new Matrix(valuesA, a.getRows(), a.getCols()), b);
+
 
         // now set A to B
-        setCells(matrixA, valuesB, bRow, bCols);
+        //setCells(matrixA, valuesB, bRow, bCols);
+        displayResult(new Matrix(valuesB, bRow, bCols), a);
 
     }
 
