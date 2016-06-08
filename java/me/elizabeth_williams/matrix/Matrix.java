@@ -79,14 +79,30 @@ public class Matrix {
     }
 
     /**
-     * Multiply two matrices.
+     * Multiply two matrices. this * otherMatrix
      * @precondition column's in this matrix == row's in otherMatrix
      * @param otherMatrix
      * @return
      */
     public Matrix multiply(Matrix otherMatrix){
         //TODO
-        return null;
+        // return null if cols of first matrix != rows of 2nd matrix
+        if(this.cols != otherMatrix.rows){
+            return null;
+        }
+        int rows = this.rows;
+        int cols = otherMatrix.cols;
+        double[][] result = new double[this.rows][otherMatrix.cols];
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                for(int k = 0; k < this.cols; k++){
+                    result[i][j] += this.matrix2DArray[i][k] * otherMatrix.matrix2DArray[k][j];
+                }
+
+            }
+
+        }
+        return new Matrix(result, rows, cols);
     }
 
 

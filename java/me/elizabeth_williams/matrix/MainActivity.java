@@ -265,14 +265,52 @@ public class MainActivity extends AppCompatActivity {
         mul.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                errorToast("Not implemented yet");
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellBVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+
+                Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
+                Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
+
+                Matrix matrixResult = mA.multiply(mB);
+                if(matrixResult == null){
+                    errorToast(getString(R.string.wrongSize));
+                    return;
+                }
+
+                displayResult(matrixResult, matrixC);
+
             }
         });
 
         mul2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                errorToast("Not implemented yet");
+                ArrayList<Double> cellAVals = userInputToValues(matrixA.getCells());
+                ArrayList<Double> cellBVals = userInputToValues(matrixB.getCells());
+
+                // if there are blank cells when user tries to perform an operation, break
+                if(cellAVals == null || cellBVals == null){
+                    errorToast(getString(R.string.missingCells));
+                    return;
+                }
+
+                Matrix mA = new Matrix(cellAVals, matrixA.getRows(), matrixA.getCols());
+                Matrix mB = new Matrix(cellBVals, matrixB.getRows(), matrixB.getCols());
+
+                Matrix matrixResult = mB.multiply(mA);
+                if(matrixResult == null){
+                    errorToast(getString(R.string.wrongSize));
+                    return;
+                }
+
+                displayResult(matrixResult, matrixC);
+
             }
         });
 
